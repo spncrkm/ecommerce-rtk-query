@@ -2,21 +2,27 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { Card, Button } from "react-bootstrap";
 import { useGetAllProductsQuery } from "../features/api/ProductAPI";
+import { addToCart, removeFromCart } from "../features/cartSlice";
+import { useDispatch } from "react-redux";
+
 
 const Product = () => {
+    const dispatch = useDispatch();
+
   const [products, setProducts] = useState([]);
 
   const { data, error, isError, isLoading, refetch } = useGetAllProductsQuery();
-    
 
-  // useEffect(() => {
-  //   const fetchProducts = async () => {
-  //     const result = await axios.get("https://fakestoreapi.com/products");
-  //     setProducts(result.data);
-  //   };
-  //   fetchProducts();
-  // }, [])
-  
+  const addItem = (product) => {
+    dispatch(addToCart(product))
+  }
+
+  const deleteItem = (id) => {
+    dispatch(removeFromCart(id))
+  }
+
+if(isError) return "Error..."
+if(isLoading) return "Loading..."
 
   return (
     <>
@@ -35,7 +41,8 @@ const Product = () => {
               <Card.Body>
                 <Card.Title>{product.title}</Card.Title>
                 <Card.Text>{product.description}</Card.Text>
-                <Button variant="primary">Add to Cart</Button>
+                <Button variant="primary" onClick={() => addItem(product)}>Add to Cart</Button>
+                <Button variant="danger" onClick={() => deleteItem(product.id)}>Delete</Button>
               </Card.Body>
             </Card>
           </div>

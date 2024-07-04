@@ -5,21 +5,21 @@ const initialState = {
 }
 
 export const cartSlice = createSlice({
-    name: 'cartItem',
+    name: 'cart',
     initialState,
     reducers: {
         addToCart: (state, action) => {
             state.cartItems.push(action.payload)
         },
         removeFromCart: (state, action) => {
-            state.cart = state.cart.filter((item) => todo.id !== action.payload)
+            state.cartItems = state.cartItems.filter((item) => item.id !== action.payload)
         }
     }
 })
 
 export const { addToCart, removeFromCart } = cartSlice.actions
 
-export default cartItem.reducers
+export default cartSlice.reducer
 
 // products.jsx
 // onClick = handleFn
