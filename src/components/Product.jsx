@@ -1,8 +1,8 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { Card, Button } from "react-bootstrap";
-import { useGetAllProductsQuery } from "../features/api/ProductAPI";
-import { addToCart, removeFromCart } from "../features/cartSlice";
+import { useGetAllProductsQuery, useDeleteProductMutation } from "../features/api/ProductAPI";
+import { addToCart } from "../features/cartSlice";
 import { useDispatch } from "react-redux";
 
 
@@ -11,25 +11,27 @@ const Product = () => {
 
   const [products, setProducts] = useState([]);
 
-  const { data, error, isError, isLoading, refetch } = useGetAllProductsQuery();
+  const { data, isError, isLoading, refetch } = useGetAllProductsQuery();
+  const { mutate } = useDeleteProductMutation();
 
   const addItem = (product) => {
     dispatch(addToCart(product))
   }
 
   const deleteItem = (id) => {
-    dispatch(removeFromCart(id))
+    mutate.filter((item) => item.id !== id)
+    
   }
 
-if(isError) return "Error..."
-if(isLoading) return "Loading..."
+if(isError) return <h2>Oh no error......</h2>
+if(isLoading) return <h1>Loading....</h1>
 
   return (
     <>
-      <h1>Product Dashboard</h1>
+      <h1 className="text-center">Product Dashboard</h1>
       <div className="row">
         {data?.map((product) => (
-          <div className="col-md-3 h-100" key={product.id}>
+          <div className="col-md-3 h-100 m-2" key={product.id}>
             <Card style={{ width: "18rem" }}>
               <div className="text-center">
                 <Card.Img
@@ -40,8 +42,8 @@ if(isLoading) return "Loading..."
               </div>
               <Card.Body>
                 <Card.Title>{product.title}</Card.Title>
-                <Card.Text>{product.description}</Card.Text>
-                <Button variant="primary" onClick={() => addItem(product)}>Add to Cart</Button>
+                <Card.Text>{product.price}</Card.Text>
+                <Button variant="success" onClick={() => addItem(product)}>Add to Cart</Button>
                 <Button variant="danger" onClick={() => deleteItem(product.id)}>Delete</Button>
               </Card.Body>
             </Card>
