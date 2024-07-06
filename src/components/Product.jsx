@@ -1,18 +1,23 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { Card, Button } from "react-bootstrap";
-import { useGetAllProductsQuery, useDeleteProductMutation } from "../features/api/ProductAPI";
+import { useGetAllProductsQuery, useUpdateProductMutation } from "../features/api/ProductAPI";
 import { addToCart } from "../features/cartSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setProducts } from "../features/productSlice";
 
 
 const Product = () => {
     const dispatch = useDispatch();
+    const {products} = useSelector(state => state.product)
 
-  const [products, setProducts] = useState([]);
+  // const [products, setProducts] = useState([]);
 
   const { data, isError, isLoading, refetch } = useGetAllProductsQuery();
-  const { mutate } = useDeleteProductMutation();
+  // const [] = useUpdateProductMutation();
+  useEffect(() => {
+    dispatch(setProducts(data))
+  }, [data])
 
   const addItem = (product) => {
     dispatch(addToCart(product))
@@ -30,7 +35,7 @@ if(isLoading) return <h1>Loading....</h1>
     <>
       <h1 className="text-center">Product Dashboard</h1>
       <div className="row">
-        {data?.map((product) => (
+        {products?.map((product) => (
           <div className="col-md-3 h-100 m-2" key={product.id}>
             <Card style={{ width: "18rem" }}>
               <div className="text-center">

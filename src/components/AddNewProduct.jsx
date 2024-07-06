@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useAddProductMutation } from '../features/api/ProductAPI'
 import { Button, Form, Modal } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
+import { addProductFn } from '../features/productSlice';
 
 const AddNewProduct = () => {
 
@@ -26,8 +27,10 @@ const AddNewProduct = () => {
                 title: productName,
                 price: price,
             }
+            dispatch(addProductFn(newProductData))
+            addProduct(newProductData)
 
-             dispatch(addProduct(newProductData))
+
         } catch (error) {
             console.error("Error adding new product:", error)
         }

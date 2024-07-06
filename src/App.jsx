@@ -11,6 +11,7 @@ import UserContext from "./context/UserContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Provider } from "react-redux";
 import { store } from "./store";
+import CustomerList from "./components/CustomerList";
 
 function App() {
   const queryClient = new QueryClient();
@@ -31,6 +32,7 @@ function App() {
               <NavBar />
               <Routes>
                 <Route path="/" element={<CreateUser />} />
+                <Route path="/users" element={<CustomerList />} />
                 <Route path="/products" element={<Product />} />
                 <Route path="/add-product" element={<AddNewProduct />} />
                 <Route path="/cart" element={<Cart />} />

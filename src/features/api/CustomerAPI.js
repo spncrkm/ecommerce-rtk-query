@@ -14,18 +14,18 @@ export const customerApi = createApi({
         }),
 
         addCustomer: builder.mutation({
-            query: (newProduct) => ({
+            query: (newCustomer) => ({
                 url: '/users',
                 method: 'POST',
-                body: newProduct
+                body: newCustomer
             })
         }), 
 
         updateCustomer: builder.mutation({
-            query: ({id, updatedItem}) => ({
+            query: ({id, updatedCustomer}) => ({
                 url: `/users/${id}`,
                 method: 'PUT',
-                body: updatedItem
+                body: updatedCustomer
             })
         }),
         
