@@ -33,6 +33,7 @@ export const customerApi = createApi({
             query: (id) => ({
                 url: `/users/${id}`,
                 method: 'DELETE'
+                
             })
         })
     })

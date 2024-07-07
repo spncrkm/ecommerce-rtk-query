@@ -18,9 +18,9 @@ export const productsApi = createApi({
                 console.log(newProduct)
                 return {
                     url: '/products',
-                    // method: 'POST',
-                    // header: {'Content-Type': 'application/json'},
-                    // body: newProduct
+                    method: 'POST',
+                    header: {'Content-Type': 'application/json'},
+                    body: newProduct
                 }
             } 
         }), 

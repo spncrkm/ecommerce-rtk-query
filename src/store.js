@@ -5,6 +5,7 @@ import { setupListeners } from "@reduxjs/toolkit/query";
 import { customerApi } from "./features/api/CustomerAPI";
 import productSliceReducer from "./features/productSlice";
 
+
 // const localStorageMiddleware = store => next => action => {
 //     const result = next(action);
 //     localStorage.setItem('cartState', JSON.stringify(store.getState().cart))
@@ -16,19 +17,13 @@ export const store = configureStore({
     [productsApi.reducerPath]: productsApi.reducer,
     [customerApi.reducerPath]: customerApi.reducer,
     cart: cartSliceReducer,
-    product: productSliceReducer
+    product: productSliceReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
       .concat(productsApi.middleware)
       .concat(customerApi.middleware)
       
-  
-  // middleware: (getDefaultMiddleware) =>
-  //     getDefaultMiddleware().concat(customerApi.middleware)
-  // preloadedState: {
-  //     cart: loadCartState(),
-  // }
 });
 
 setupListeners(store.dispatch);

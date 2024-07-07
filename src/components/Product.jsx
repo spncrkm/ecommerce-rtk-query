@@ -1,35 +1,46 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { Card, Button } from "react-bootstrap";
-import { useGetAllProductsQuery, useUpdateProductMutation } from "../features/api/ProductAPI";
+import {
+  useDeleteProductMutation,
+  useGetAllProductsQuery,
+  useUpdateProductMutation,
+} from "../features/api/ProductAPI";
 import { addToCart } from "../features/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { setProducts } from "../features/productSlice";
-
+import { setProducts, removeProduct } from "../features/productSlice";
 
 const Product = () => {
-    const dispatch = useDispatch();
-    const {products} = useSelector(state => state.product)
+  const dispatch = useDispatch();
+  const { products } = useSelector((state) => state.product);
+  const { cartItems } = useSelector((state) => state.cart)
 
-  // const [products, setProducts] = useState([]);
+  const { data, isError, isLoading } = useGetAllProductsQuery();
+  const [deleteProduct] = useDeleteProductMutation();
 
-  const { data, isError, isLoading, refetch } = useGetAllProductsQuery();
-  // const [] = useUpdateProductMutation();
   useEffect(() => {
-    dispatch(setProducts(data))
-  }, [data])
+    if (data) {
+    dispatch(setProducts(data));
+    }
+  }, [data, dispatch]);
+
+  
 
   const addItem = (product) => {
-    dispatch(addToCart(product))
-  }
+    dispatch(addToCart(product));
+  };
 
-  const deleteItem = (id) => {
-    mutate.filter((item) => item.id !== id)
-    
-  }
+  const handleDelete = async (id) => {
+    try {
+      await deleteProduct(id);
+      dispatch(removeProduct(id));
+    } catch (error) {
+      console.error("Failed to delete the product:", error);
+    }
+  };
 
-if(isError) return <h2>Oh no error......</h2>
-if(isLoading) return <h1>Loading....</h1>
+  if (isError) return <h2>Oh no error......</h2>;
+  if (isLoading) return <h1>Loading....</h1>;
 
   return (
     <>
@@ -48,8 +59,15 @@ if(isLoading) return <h1>Loading....</h1>
               <Card.Body>
                 <Card.Title>{product.title}</Card.Title>
                 <Card.Text>{product.price}</Card.Text>
-                <Button variant="success" onClick={() => addItem(product)}>Add to Cart</Button>
-                <Button variant="danger" onClick={() => deleteItem(product.id)}>Delete</Button>
+                <Button variant="success" onClick={() => addItem(product)}>
+                  Add to Cart
+                </Button>
+                <Button
+                  variant="danger"
+                  onClick={() => handleDelete(product.id)}
+                >
+                  Delete
+                </Button>
               </Card.Body>
             </Card>
           </div>

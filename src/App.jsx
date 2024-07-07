@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Product from "./components/Product";
@@ -13,21 +13,31 @@ import { Provider } from "react-redux";
 import { store } from "./store";
 import CustomerList from "./components/CustomerList";
 
+
 function App() {
   const queryClient = new QueryClient();
 
-  const [user, setUser] = useState(() => {
-    let currentUser = sessionStorage.getItem("user");
-    return currentUser
-      ? JSON.parse(currentUser)
+  const [newUser, setNewUser] = useState(() => {
+    const currentUser = sessionStorage.getItem("newUser");
+    const currentToken = sessionStorage.getItem("token");
+    return currentUser && currentToken
+      ? {...JSON.parse(currentUser), token: currentToken, isLoggedIn: true}
       : { name: "", password: "", email: "", isLoggedIn: false };
   });
+
+  useEffect(() => {
+    const currentUser = sessionStorage.getItem("newUser");
+    const currentToken = sessionStorage.getItem("token");
+    if (currentUser && currentToken) {
+      setNewUser({ ...JSON.parse(currentUser), token: currentToken, isLoggedIn: true });
+    }
+  }, []);
 
   return (
     <>
       <QueryClientProvider client={queryClient}>
         <Provider store={store}>
-          <UserContext.Provider value={{ user, setUser }}>
+          <UserContext.Provider value={{ newUser, setNewUser }}>
             <BrowserRouter>
               <NavBar />
               <Routes>

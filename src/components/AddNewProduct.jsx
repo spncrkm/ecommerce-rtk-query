@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useAddProductMutation } from '../features/api/ProductAPI'
+import { useAddProductMutation, useGetAllProductsQuery } from '../features/api/ProductAPI'
 import { Button, Form, Modal } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { addProductFn } from '../features/productSlice';
@@ -8,34 +8,36 @@ const AddNewProduct = () => {
 
     const dispatch = useDispatch();
     const [modalShow, setModalShow] = React.useState(false);
-    const [addProduct, {data, error, isLoading}] = useAddProductMutation();
+    const [addProduct, {isLoading, error}] = useAddProductMutation();
+    const { refetch } = useGetAllProductsQuery()
     const [productName, setProductName] = useState('');
     const [price, setPrice] = useState('');
     const handleClose = () => setModalShow(false);
 
-    if (error) {
-        return <h2>Error</h2>
-    }
-    if (isLoading) {
-        return <h2>Loading...</h2>
-    }
+    
 
     const handleAddProduct = async (event) => {
         event.preventDefault();
         try {
             const newProductData = {
                 title: productName,
-                price: price,
-            }
-            dispatch(addProductFn(newProductData))
-            addProduct(newProductData)
-
-
+                price: price
+            };
+            const result = await addProduct(newProductData).unwrap();
+            console.log("New product added:", result)
+            dispatch(addProductFn(result))
+            refetch();
+            setModalShow(true)
         } catch (error) {
             console.error("Error adding new product:", error)
         }
-        setModalShow(true)
-    }
+    };
+    if (error) {
+      return <h2>Error</h2>
+  };
+  if (isLoading) {
+      return <h2>Loading...</h2>
+  };
 
   return (
     <div>
@@ -63,7 +65,7 @@ const AddNewProduct = () => {
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <h4>{data?.title}</h4>
+        <h4>{productName}</h4>
         <p>
           Has been successfully added!
         </p>

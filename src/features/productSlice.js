@@ -15,10 +15,14 @@ export const productSlice = createSlice({
        addProductFn: (state, action) => {
         state.products.push(action.payload)
         console.log(state.products)
+       },
+       removeProduct: (state, action) => {
+        state.products = state.products.filter(product => product.id !== action.payload)
+        console.log(state.products)
        }
     }
 })
 
-export const { setProducts, addProductFn } = productSlice.actions
+export const { setProducts, addProductFn, removeProduct } = productSlice.actions
 
 export default productSlice.reducer
