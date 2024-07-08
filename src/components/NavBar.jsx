@@ -22,9 +22,9 @@ const NavBar = () => {
   
 
   return (
-    <div className="sticky-top">
-      <Navbar expand="lg" className="bg-body-tertiary">
-        <Container className="container-fluid">
+    <div className="nav-container">
+      <Navbar expand="lg" id="navbar">
+        <Container className="navbar-con">
           <Navbar.Brand as={Link} to='/'>Redux Toolkit Project</Navbar.Brand>
           <Nav className="me-auto">
               <>
